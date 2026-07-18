@@ -1,0 +1,52 @@
+{
+  "logs": [
+    {
+      "date": "2026-07-18",
+      "medications": [
+        {
+          "name": "Metformin",
+          "dosage": "500mg",
+          "taken": true
+        }
+      ],
+      "cycle": "light",
+      "symptoms": {
+        "energy": 6,
+        "pelvicPain": 4,
+        "bloating": 5
+      },
+      "pcosSigns": {
+        "acneBreakout": false,
+        "hairChanges": true
+      },
+      "mood": "calm",
+      "sleepHours": 7.5,
+      "cravings": "sweet snacks"
+    }
+  ],
+  "terms": [
+    {
+      "id": 1,
+      "term": "Insulin Resistance",
+      "definition": "A condition where body cells do not respond effectively to insulin.",
+      "userNotes": "Discuss fasting insulin levels during next appointment."
+    }
+  ],
+  "appointments": [
+    {
+      "id": 1,
+      "date": "2026-08-01",
+      "doctorName": "Dr. Sarah Lim",
+      "questions": [
+        "Should medication dosage be adjusted based on current symptoms?"
+      ],
+      "labResults": [
+        {
+          "testName": "HbA1c",
+          "currentValue": "5.9%",
+          "previousValue": "6.2%"
+        }
+      ]
+    }
+  ]
+}

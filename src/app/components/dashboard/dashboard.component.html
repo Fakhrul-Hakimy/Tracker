@@ -1,0 +1,28 @@
+<section class="dashboard-header">
+  <h1>PCOS Care Dashboard</h1>
+  <p>Track symptoms, treatment routines, and appointment readiness in one place.</p>
+</section>
+
+<section class="stats-grid">
+  <article class="card stat-card">
+    <h2>{{ totalLogs }}</h2>
+    <p>Daily logs captured</p>
+  </article>
+  <article class="card stat-card">
+    <h2>{{ totalTerms }}</h2>
+    <p>Glossary notes saved</p>
+  </article>
+  <article class="card stat-card">
+    <h2>{{ upcomingAppointments }}</h2>
+    <p>Upcoming appointments</p>
+  </article>
+</section>
+
+<section class="quick-actions card">
+  <h3>Quick Actions</h3>
+  <div class="button-row">
+    <a routerLink="/daily" class="button-link">Add daily log</a>
+    <a routerLink="/glossary" class="button-link">Review glossary</a>
+    <a routerLink="/appointments" class="button-link">Plan appointment</a>
+  </div>
+</section>

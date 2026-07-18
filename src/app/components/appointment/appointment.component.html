@@ -1,0 +1,79 @@
+<section class="card">
+  <h2>Upcoming Appointments</h2>
+  @if (upcomingAppointments.length === 0) {
+    <p>No upcoming appointments yet.</p>
+  } @else {
+    <div class="appointment-grid">
+      @for (appointment of upcomingAppointments; track appointment.id) {
+        <article class="appointment-card">
+          <h3>{{ appointment.date }} · {{ appointment.doctorName }}</h3>
+
+          <div>
+            <strong>Questions</strong>
+            <ul>
+              @for (question of appointment.questions; track $index) {
+                <li>{{ question }}</li>
+              }
+            </ul>
+          </div>
+
+          <div>
+            <strong>Lab results</strong>
+            <ul>
+              @for (result of appointment.labResults; track result.testName + $index) {
+                <li>
+                  {{ result.testName }}: {{ result.currentValue }} (prev: {{ result.previousValue }})
+                </li>
+              }
+            </ul>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>
+
+<section class="card">
+  <h3>Add Appointment</h3>
+  <form [formGroup]="form" (ngSubmit)="saveAppointment()" class="form-grid">
+    <label>
+      Date
+      <input type="date" formControlName="date" />
+    </label>
+
+    <label>
+      Doctor name
+      <input type="text" formControlName="doctorName" />
+    </label>
+
+    <div class="full-width" formArrayName="questions">
+      <h4>Questions</h4>
+      @for (question of questions.controls; track $index) {
+        <div class="array-row">
+          <input [formControlName]="$index" placeholder="Add question for doctor" />
+          <button type="button" class="button-secondary" (click)="removeQuestion($index)">Remove</button>
+        </div>
+      }
+      <button type="button" class="button-secondary" (click)="addQuestion()">Add question</button>
+    </div>
+
+    <div class="full-width" formArrayName="labResults">
+      <h4>Lab Results</h4>
+      @for (result of labResults.controls; track $index) {
+        <div [formGroupName]="$index" class="result-row">
+          <input formControlName="testName" placeholder="Test name" />
+          <input formControlName="currentValue" placeholder="Current value" />
+          <input formControlName="previousValue" placeholder="Previous value" />
+          <button type="button" class="button-secondary" (click)="removeLabResult($index)">Remove</button>
+        </div>
+      }
+      <button type="button" class="button-secondary" (click)="addLabResult()">Add lab result</button>
+    </div>
+
+    <button type="submit" class="button-primary">Save appointment</button>
+  </form>
+
+  @if (statusMessage) {
+    <p class="status-message">{{ statusMessage }}</p>
+  }
+</section>

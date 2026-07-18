@@ -7,8 +7,8 @@ import { Appointment, DailyLog, GlossaryTerm, TrackerDatabase } from '../models/
 export class PcosDataService {
   private readonly apiUrl = 'http://localhost:3000';
   private readonly dbAssetUrl = 'db.json';
-  private readonly storageKey = 'pcos-tracker-db';
   private readonly useLocalApi = this.shouldUseLocalApi();
+  private inMemoryDb: TrackerDatabase | null = null;
 
   constructor(private readonly http: HttpClient) {}
 
@@ -28,7 +28,7 @@ export class PcosDataService {
     return this.readBrowserDb().pipe(
       switchMap((db) => {
         const updatedDb: TrackerDatabase = { ...db, logs: [payload, ...db.logs] };
-        return this.persistBrowserDb(updatedDb).pipe(map(() => payload));
+        return this.persistInMemoryDb(updatedDb).pipe(map(() => payload));
       })
     );
   }
@@ -51,7 +51,7 @@ export class PcosDataService {
         const nextId = db.terms.length ? Math.max(...db.terms.map((term) => term.id)) + 1 : 1;
         const term = { ...payload, id: payload.id || nextId };
         const updatedDb: TrackerDatabase = { ...db, terms: [term, ...db.terms] };
-        return this.persistBrowserDb(updatedDb).pipe(map(() => term));
+        return this.persistInMemoryDb(updatedDb).pipe(map(() => term));
       })
     );
   }
@@ -81,7 +81,7 @@ export class PcosDataService {
           appointments: [appointment, ...db.appointments]
         };
 
-        return this.persistBrowserDb(updatedDb).pipe(map(() => appointment));
+        return this.persistInMemoryDb(updatedDb).pipe(map(() => appointment));
       })
     );
   }
@@ -96,16 +96,15 @@ export class PcosDataService {
   }
 
   private readBrowserDb(): Observable<TrackerDatabase> {
-    if (typeof window === 'undefined') {
-      return this.readDefaultDatabase();
+    if (this.inMemoryDb) {
+      return of(this.inMemoryDb);
     }
 
-    const cachedDb = window.localStorage.getItem(this.storageKey);
-    if (cachedDb) {
-      return of(JSON.parse(cachedDb) as TrackerDatabase);
-    }
-
-    return this.readDefaultDatabase().pipe(tap((db) => this.writeDb(db)));
+    return this.readDefaultDatabase().pipe(
+      tap((db) => {
+        this.inMemoryDb = db;
+      })
+    );
   }
 
   private readDefaultDatabase(): Observable<TrackerDatabase> {
@@ -120,16 +119,8 @@ export class PcosDataService {
     );
   }
 
-  private persistBrowserDb(database: TrackerDatabase): Observable<TrackerDatabase> {
-    this.writeDb(database);
+  private persistInMemoryDb(database: TrackerDatabase): Observable<TrackerDatabase> {
+    this.inMemoryDb = database;
     return of(database);
-  }
-
-  private writeDb(database: TrackerDatabase): void {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    window.localStorage.setItem(this.storageKey, JSON.stringify(database));
   }
 }

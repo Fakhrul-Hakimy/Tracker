@@ -10,7 +10,7 @@ Professional Angular-based PCOS tracker for daily symptoms, glossary management,
 - Appointment planner with dynamic question and lab-result form arrays
 - Data service that supports:
   - `json-server` API on `http://localhost:3000` (localhost mode)
-  - Static `db.json` + localStorage persistence on GitHub Pages
+  - Static `db.json` + in-memory updates on GitHub Pages
 
 ## Local development
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -13,6 +13,9 @@ import { GlossarySearchPipe } from '../../pipes/glossary-search.pipe';
   styleUrl: './glossary.component.scss'
 })
 export class GlossaryComponent implements OnInit {
+  private readonly fb = inject(FormBuilder);
+  private readonly dataService = inject(PcosDataService);
+
   searchQuery = '';
   terms: GlossaryTerm[] = [];
   statusMessage = '';
@@ -22,11 +25,6 @@ export class GlossaryComponent implements OnInit {
     definition: ['', Validators.required],
     userNotes: ['']
   });
-
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly dataService: PcosDataService
-  ) {}
 
   ngOnInit(): void {
     this.loadTerms();

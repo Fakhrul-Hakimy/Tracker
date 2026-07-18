@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DailyLog } from '../../models/pcos.models';
@@ -11,6 +11,9 @@ import { PcosDataService } from '../../services/pcos-data.service';
   styleUrl: './daily-tracker.component.scss'
 })
 export class DailyTrackerComponent implements OnInit {
+  private readonly fb = inject(FormBuilder);
+  private readonly dataService = inject(PcosDataService);
+
   logs: DailyLog[] = [];
   statusMessage = '';
 
@@ -31,11 +34,6 @@ export class DailyTrackerComponent implements OnInit {
     sleepHours: [7, [Validators.required, Validators.min(0), Validators.max(24)]],
     cravings: ['']
   });
-
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly dataService: PcosDataService
-  ) {}
 
   ngOnInit(): void {
     this.loadLogs();

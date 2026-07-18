@@ -1,0 +1,13 @@
+<header class="navbar">
+  <div class="brand">PCOS Tracker Pro</div>
+  <nav class="nav-links">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+    <a routerLink="/daily" routerLinkActive="active">Daily Tracker</a>
+    <a routerLink="/glossary" routerLinkActive="active">Glossary</a>
+    <a routerLink="/appointments" routerLinkActive="active">Appointments</a>
+  </nav>
+</header>
+
+<main class="page-shell">
+  <router-outlet></router-outlet>
+</main>

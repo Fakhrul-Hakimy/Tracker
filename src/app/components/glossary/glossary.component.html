@@ -1,0 +1,46 @@
+<section class="card">
+  <h2>PCOS Glossary</h2>
+  <input
+    [(ngModel)]="searchQuery"
+    type="search"
+    class="search-input"
+    placeholder="Search by term, definition, or notes"
+  />
+
+  @if ((terms | glossarySearch: searchQuery).length === 0) {
+    <p>No matching glossary terms found.</p>
+  } @else {
+    <div class="term-grid">
+      @for (term of terms | glossarySearch: searchQuery; track term.id) {
+        <article class="term-card">
+          <h3>{{ term.term }}</h3>
+          <p>{{ term.definition }}</p>
+          <small>{{ term.userNotes }}</small>
+        </article>
+      }
+    </div>
+  }
+</section>
+
+<section class="card">
+  <h3>Add Glossary Term</h3>
+  <form [formGroup]="form" (ngSubmit)="saveTerm()" class="form-grid">
+    <label>
+      Term
+      <input type="text" formControlName="term" />
+    </label>
+    <label>
+      Definition
+      <textarea rows="3" formControlName="definition"></textarea>
+    </label>
+    <label>
+      Notes
+      <textarea rows="2" formControlName="userNotes"></textarea>
+    </label>
+    <button type="submit" class="button-primary">Save term</button>
+  </form>
+
+  @if (statusMessage) {
+    <p class="status-message">{{ statusMessage }}</p>
+  }
+</section>

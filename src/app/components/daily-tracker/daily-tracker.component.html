@@ -1,0 +1,77 @@
+<section class="card">
+  <h2>Daily Symptom Tracker</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+    <label>
+      Date
+      <input type="date" formControlName="date" />
+    </label>
+
+    <label>
+      Cycle flow level
+      <input type="text" formControlName="cycle" placeholder="light / medium / heavy" />
+    </label>
+
+    <label>
+      Mood
+      <input type="text" formControlName="mood" placeholder="calm, low, positive" />
+    </label>
+
+    <label>
+      Sleep hours
+      <input type="number" formControlName="sleepHours" min="0" max="24" />
+    </label>
+
+    <label class="full-width">
+      Cravings
+      <input type="text" formControlName="cravings" placeholder="salty snacks, sweets" />
+    </label>
+
+    <div formGroupName="symptoms" class="full-width nested-grid">
+      <h3>Symptoms (1-10)</h3>
+      <label>Energy <input type="number" formControlName="energy" min="1" max="10" /></label>
+      <label>Pelvic pain <input type="number" formControlName="pelvicPain" min="1" max="10" /></label>
+      <label>Bloating <input type="number" formControlName="bloating" min="1" max="10" /></label>
+    </div>
+
+    <div formGroupName="pcosSigns" class="full-width nested-grid">
+      <h3>PCOS signs</h3>
+      <label><input type="checkbox" formControlName="acneBreakout" /> Acne breakout</label>
+      <label><input type="checkbox" formControlName="hairChanges" /> Hair changes</label>
+    </div>
+
+    <div formArrayName="medications" class="full-width">
+      <h3>Medications</h3>
+      @for (med of medications.controls; track $index) {
+        <div [formGroupName]="$index" class="row-grid">
+          <input type="text" formControlName="name" placeholder="Medication name" />
+          <input type="text" formControlName="dosage" placeholder="Dosage" />
+          <label><input type="checkbox" formControlName="taken" /> Taken</label>
+          <button type="button" class="button-secondary" (click)="removeMedication($index)">Remove</button>
+        </div>
+      }
+      <button type="button" class="button-secondary" (click)="addMedication()">Add medication</button>
+    </div>
+
+    <button type="submit" class="button-primary">Save daily log</button>
+  </form>
+
+  @if (statusMessage) {
+    <p class="status-message">{{ statusMessage }}</p>
+  }
+</section>
+
+<section class="card">
+  <h3>Recent entries</h3>
+  @if (logs.length === 0) {
+    <p>No logs yet.</p>
+  } @else {
+    <ul class="simple-list">
+      @for (log of logs; track log.date) {
+        <li>
+          <strong>{{ log.date }}</strong>
+          <span> • Mood: {{ log.mood }} • Sleep: {{ log.sleepHours }}h</span>
+        </li>
+      }
+    </ul>
+  }
+</section>
